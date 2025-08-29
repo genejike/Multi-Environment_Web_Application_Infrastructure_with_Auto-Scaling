@@ -3,7 +3,7 @@ resource "aws_db_subnet_group" "RDS_subnet_group" {
   name       = "${var.db_engine}-subnet-group"
   subnet_ids = var.private_subnet_ids
 lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
   tags = {
     Name = "${var.db_engine}-subnet-group"

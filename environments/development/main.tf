@@ -58,3 +58,13 @@ module "database" {
   deletion_protection     = false
   app_security_group_id   = module.compute.alb_security_group_id
 }
+
+module "monitoring" {
+  source       = "../../modules/monitoring"
+  alb_arn_suffix = module.compute.alb_dns_name != "" ? replace(module.compute.alb_dns_name, "dualstack.", "") : ""
+  asg_name       = module.compute.asg_name
+  db_identifier  = module.database.db_identifier
+  sns_email      = "genejike2014@gmail.com"
+  tags           = { Environment = "dev", Project = "web-platform" }
+
+}

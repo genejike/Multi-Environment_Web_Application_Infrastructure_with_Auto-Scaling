@@ -22,3 +22,7 @@ output "target_group_arn" {
 output "db_endpoint" {
   value = module.database.db_endpoint
 }
+
+output "db_identifier" {
+  value = module.database.db_identifier
+}

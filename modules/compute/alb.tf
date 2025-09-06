@@ -16,6 +16,17 @@ resource "aws_lb_target_group" "alb-example" {
   name        = "tf-example-lb-alb-tg"
   target_type = "alb"
   port        = 80
-  protocol    = "TCP"
+  protocol    = "HTTP"
   vpc_id      = var.vpc_id
+  deregistration_delay = 30
+
+  health_check {
+    path                = "/health"
+    protocol            = "HTTP"
+    matcher             = "200-399"
+    interval            = 30
+    timeout             = 6
+    healthy_threshold   = 5
+    unhealthy_threshold = 2
+  }
 }

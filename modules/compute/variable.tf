@@ -43,11 +43,6 @@ variable "max_size" {
   description = "Maximum number of EC2 instances in the Auto Scaling Group"
 }
 
-variable "user_data" {
-  type        = string
-  default     = ""
-  description = "Optional user_data script to configure EC2 instances at launch"
-}
 
 variable "tags" {
   type        = map(string)
@@ -71,4 +66,15 @@ variable "project" {
   type        = string
   default     = "HUG-IB"
   description = "Project name for resource naming"
+}
+variable "user_data" {
+  description = "EC2 user data script"
+  default = <<-EOF
+    #!/bin/bash
+    # Install and start a simple web server
+    yum install -y httpd
+    systemctl enable httpd
+    systemctl start httpd
+    echo "healthy" > /var/www/html/health
+  EOF
 }

@@ -10,7 +10,7 @@ resource "aws_security_group" "alb_sg" {
     description = "Allow HTTP"
     from_port   = 80
     to_port     = 80
-    protocol    = "tcp"
+    protocol    = "HTTP"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -18,7 +18,7 @@ resource "aws_security_group" "alb_sg" {
     description = "Allow HTTPS"
     from_port   = 443
     to_port     = 443
-    protocol    = "tcp"
+    protocol    = "HTTPS"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -41,7 +41,7 @@ resource "aws_security_group" "app_sg" {
     description     = "Allow traffic from ALB on app port"
     from_port       = var.app_port
     to_port         = var.app_port
-    protocol        = "tcp"
+    protocol        = "HTTP"
     security_groups = [aws_security_group.alb_sg.id]
   }
 
@@ -52,7 +52,7 @@ resource "aws_security_group" "app_sg" {
       description = "Allow SSH"
       from_port   = 22
       to_port     = 22
-      protocol    = "tcp"
+      protocol    = "SSH"
       cidr_blocks = [var.allow_ssh_cidr]
     }
   }
@@ -167,7 +167,8 @@ resource "aws_launch_template" "this" {
   name_prefix   = "app-lt-"
   image_id      = data.aws_ssm_parameter.ami.value
   instance_type = var.instance_type
-  user_data     = base64encode(var.user_data)
+
+  user_data = base64encode(var.user_data)
 
   iam_instance_profile {
     name = aws_iam_instance_profile.ec2_profile.name
